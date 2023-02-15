@@ -6,14 +6,14 @@ resource "azurerm_container_group" "main" {
   ip_address_type     = "Public"
   dns_name_label      = "aci-${lower(random_id.storage_account.hex)}"
   os_type             = "Linux"
-  exposed_port = [ 
+  exposed_port = [
     {
-        port = 9090
-        protocol = "TCP"
+      port     = 9090
+      protocol = "TCP"
     },
     {
-        port = 3000
-        protocol = "TCP"
+      port     = 3000
+      protocol = "TCP"
     }
   ]
 
@@ -26,7 +26,13 @@ resource "azurerm_container_group" "main" {
       TZ = "America/Sao_Paulo"
     }
 
-    commands = [ "/bin/prometheus", "--config.file=/etc/prometheus/prometheus.yml" ]
+    commands = [
+      "/bin/prometheus",
+      "--config.file=/etc/prometheus/prometheus.yml",
+      "--storage.tsdb.path=/etc/prometheus/data",
+      "--storage.tsdb.retention.time=200h",
+      "-web.enable-lifecycle"
+    ]
 
     ports {
       port     = 9090
@@ -34,12 +40,12 @@ resource "azurerm_container_group" "main" {
     }
 
     volume {
-      name = "prometheus"
-      mount_path = "/etc/prometheus/"
-      share_name = "prometheus"
+      name                 = "prometheus"
+      mount_path           = "/etc/prometheus/"
+      share_name           = "prometheus"
       storage_account_name = azurerm_storage_account.main.name
-      storage_account_key = azurerm_storage_account.main.primary_access_key
-      read_only = false
+      storage_account_key  = azurerm_storage_account.main.primary_access_key
+      read_only            = false
     }
   }
 
@@ -53,17 +59,17 @@ resource "azurerm_container_group" "main" {
     }
 
     ports {
-      port = 3000
+      port     = 3000
       protocol = "TCP"
     }
 
     volume {
-      name = "grafana"      
-      mount_path = "/var/lib/grafana"
-      share_name = "grafana"
-      read_only = false
+      name                 = "grafana"
+      mount_path           = "/var/lib/grafana"
+      share_name           = "grafana"
+      read_only            = false
       storage_account_name = azurerm_storage_account.main.name
-      storage_account_key = azurerm_storage_account.main.primary_access_key
+      storage_account_key  = azurerm_storage_account.main.primary_access_key
     }
   }
 
