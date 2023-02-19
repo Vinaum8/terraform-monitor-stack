@@ -71,6 +71,25 @@ resource "azurerm_container_group" "main" {
       storage_account_name = azurerm_storage_account.main.name
       storage_account_key  = azurerm_storage_account.main.primary_access_key
     }
+    
+    volume {
+      name                 = "dashboards"
+      mount_path           = "/etc/grafana/provisioning/dashboards/"
+      share_name           = "dashboards"
+      read_only            = false
+      storage_account_name = azurerm_storage_account.main.name
+      storage_account_key  = azurerm_storage_account.main.primary_access_key
+    }
+
+    volume {
+      name                 = "datasources"
+      mount_path           = "/etc/grafana/provisioning/datasources/"
+      share_name           = "datasources"
+      read_only            = false
+      storage_account_name = azurerm_storage_account.main.name
+      storage_account_key  = azurerm_storage_account.main.primary_access_key
+    }
+
   }
 
   tags = {

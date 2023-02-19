@@ -45,3 +45,29 @@ resource "azurerm_storage_share" "stg_files_grafana" {
   quota                = 10
   depends_on           = [azurerm_storage_account.main]
 }
+
+resource "azurerm_storage_share" "stg_files_grafana_dashboards" {
+  name                 = "dashboards"
+  storage_account_name = azurerm_storage_account.main.name
+  quota                = 10
+  depends_on           = [azurerm_storage_account.main]
+}
+
+resource "azurerm_storage_share_file" "dashboards" {
+  name = "dashboard.yaml"
+  source = "./grafana/provisioning/dashboards/dashboard.yaml"
+  storage_share_id = azurerm_storage_share.stg_files_grafana_dashboards.id
+}
+
+resource "azurerm_storage_share" "stg_files_grafana_datasources" {
+  name                 = "datasources"
+  storage_account_name = azurerm_storage_account.main.name
+  quota                = 10
+  depends_on           = [azurerm_storage_account.main]
+}
+
+resource "azurerm_storage_share_file" "datasources" {
+  name = "datasources.yaml"
+  source = "./grafana/provisioning/datasources/datasources.yaml"
+  storage_share_id = azurerm_storage_share.stg_files_grafana_datasources.id
+}
