@@ -80,8 +80,8 @@ resource "azurerm_storage_share" "stg_nginx_fileshare" {
   depends_on           = [azurerm_storage_account.main]
 }
 
-resource "azurerm_storage_share_file" "datasources" {
-  name = "nginx.conf"
-  source = "./nginx/nginx.config"
+resource "azurerm_storage_share_file" "nginx_config" {
+  name             = "nginx.conf"
+  source           = "./nginx/nginx.conf"
   storage_share_id = azurerm_storage_share.stg_nginx_fileshare.id
 }

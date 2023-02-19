@@ -14,14 +14,22 @@ resource "azurerm_container_group" "main" {
     {
       port     = 3000
       protocol = "TCP"
+    },
+    {
+      port     = 8080
+      protocol = "TCP"
+    },
+    {
+      port     = 80
+      protocol = "TCP"
     }
   ]
 
   container {
     name   = "nginx"
     image  = "nginx"
-    cpu    = "1.0"
-    memory = "1.5"
+    cpu    = "0.1"
+    memory = "0.5"
     environment_variables = {
       TZ = "America/Sao_Paulo"
     }
@@ -32,12 +40,12 @@ resource "azurerm_container_group" "main" {
     }
 
     ports {
-      port = 8080
+      port     = 8080
       protocol = "TCP"
     }
 
     ports {
-      port = 443
+      port     = 443
       protocol = "TCP"
     }
 
@@ -54,22 +62,22 @@ resource "azurerm_container_group" "main" {
   container {
     name   = "nginx-prometheus-exporter"
     image  = "nginx/nginx-prometheus-exporter"
-    cpu    = "1.0"
-    memory = "1.5"
+    cpu    = "0.1"
+    memory = "0.5"
     environment_variables = {
       TZ = "America/Sao_Paulo"
     }
 
-    commands = [ 
-      "-nginx.scrape-uri=http://localhost:8080/stub_status" 
+    commands = [
+      "-nginx.scrape-uri=http://localhost:8080/stub_status"
     ]
   }
 
   container {
     name   = "busybox"
     image  = "busybox"
-    cpu    = "1.0"
-    memory = "1.5"
+    cpu    = "0.1"
+    memory = "0.5"
     environment_variables = {
       TZ = "America/Sao_Paulo"
     }
