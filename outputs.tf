@@ -6,3 +6,11 @@ output "ip_address" {
 output "fqdn" {
   value = azurerm_container_group.main.fqdn
 }
+
+output "http-grafana" {
+  value = "http://${azurerm_container_group.main.fqdn}:3000/"
+}
+
+output "http-prometheus" {
+  value = "http://${azurerm_container_group.main.fqdn}:9090/"
+}

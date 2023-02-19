@@ -1,10 +1,10 @@
-resource "azurerm_resource_group" "main" {
-  name     = "rg-terraform-monitor-stack"
-  location = var.location
-}
-
 resource "random_id" "storage_account" {
   byte_length = 8
+}
+
+resource "azurerm_resource_group" "main" {
+  name     = "rg-terraform-monitor-stack-${lower(random_id.storage_account.hex)}"
+  location = var.location
 }
 
 resource "azurerm_storage_account" "main" {
@@ -54,8 +54,8 @@ resource "azurerm_storage_share" "stg_files_grafana_dashboards" {
 }
 
 resource "azurerm_storage_share_file" "dashboards" {
-  name = "dashboard.yaml"
-  source = "./grafana/provisioning/dashboards/dashboard.yaml"
+  name             = "dashboard.yaml"
+  source           = "./grafana/provisioning/dashboards/dashboard.yaml"
   storage_share_id = azurerm_storage_share.stg_files_grafana_dashboards.id
 }
 
@@ -67,7 +67,7 @@ resource "azurerm_storage_share" "stg_files_grafana_datasources" {
 }
 
 resource "azurerm_storage_share_file" "datasources" {
-  name = "datasources.yaml"
-  source = "./grafana/provisioning/datasources/datasources.yaml"
+  name             = "datasources.yaml"
+  source           = "./grafana/provisioning/datasources/datasources.yaml"
   storage_share_id = azurerm_storage_share.stg_files_grafana_datasources.id
 }
