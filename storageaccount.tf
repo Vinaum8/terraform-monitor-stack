@@ -82,6 +82,6 @@ resource "azurerm_storage_share" "stg_nginx_fileshare" {
 
 resource "azurerm_storage_share_file" "nginx_config" {
   name             = "nginx.conf"
-  source           = "./nginx/nginx.config"
+  source           = "./nginx/nginx.conf"
   storage_share_id = azurerm_storage_share.stg_nginx_fileshare.id
 }
