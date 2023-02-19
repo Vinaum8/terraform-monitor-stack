@@ -1,6 +1,6 @@
 # file for create container instances of lab
 resource "azurerm_container_group" "main" {
-  name                = "sample-monitor-stack"
+  name                = "sample-monitor-stack-${lower(random_id.storage_account.hex)}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   ip_address_type     = "Public"
@@ -28,10 +28,7 @@ resource "azurerm_container_group" "main" {
 
     commands = [
       "/bin/prometheus",
-      "--config.file=/etc/prometheus/prometheus.yml",
-      "--storage.tsdb.path=/etc/prometheus/data",
-      "--storage.tsdb.retention.time=200h",
-      "-web.enable-lifecycle"
+      "--config.file=/etc/prometheus/prometheus.yml"
     ]
 
     ports {
@@ -71,7 +68,7 @@ resource "azurerm_container_group" "main" {
       storage_account_name = azurerm_storage_account.main.name
       storage_account_key  = azurerm_storage_account.main.primary_access_key
     }
-    
+
     volume {
       name                 = "dashboards"
       mount_path           = "/etc/grafana/provisioning/dashboards/"
