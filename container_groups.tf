@@ -72,6 +72,19 @@ resource "azurerm_container_group" "main" {
       "-nginx.scrape-uri=http://localhost:8080/stub_status"
     ]
   }
+  # container {
+  #   name   = "nginx-prometheus-exporter"
+  #   image  = "nginx/nginx-prometheus-exporter"
+  #   cpu    = "1.0"
+  #   memory = "1.5"
+  #   environment_variables = {
+  #     TZ = "America/Sao_Paulo"
+  #   }
+# 
+  #   commands = [ 
+  #     "-nginx.scrape-uri=http://localhost:8080/stub_status" 
+  #   ]
+  # }
 
   container {
     name   = "busybox"

@@ -54,8 +54,8 @@ resource "azurerm_storage_share" "stg_files_grafana_dashboards" {
 }
 
 resource "azurerm_storage_share_file" "dashboards" {
-  name             = "dashboard.yaml"
-  source           = "./grafana/provisioning/dashboards/dashboard.yaml"
+  name             = "dashboard.yml"
+  source           = "./grafana/provisioning/dashboards/dashboard.yml"
   storage_share_id = azurerm_storage_share.stg_files_grafana_dashboards.id
 }
 
