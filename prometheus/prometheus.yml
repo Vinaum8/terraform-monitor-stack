@@ -4,17 +4,9 @@ global:
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
-# Alertmanager configuration
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-          # - alertmanager:9093
-
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
-  # - "first_rules.yml"
-  # - "second_rules.yml"
+  - "alert.rules"
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
@@ -27,3 +19,39 @@ scrape_configs:
 
     static_configs:
       - targets: ["localhost:9090"]
+
+  # EXEMPLO DE NODE EXPORTER
+  - job_name: "nodeexporter"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["nodeexporter:9100"]
+
+  # Exemplo Container Adivsor HOST
+  - job_name: "cadvisor"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+  # Pushgatewy
+  - job_name: "pushgateway"
+    scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets: ["pushgateway:9091"]
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+          # - alertmanager:9093
+#  - job_name: 'nginx'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['nginxexporter:9113']
+
+#  - job_name: 'aspnetcore'
+#    scrape_interval: 10s
+#    static_configs:
+#      - targets: ['eventlog-proxy:5000', 'eventlog:5000']
