@@ -18,6 +18,64 @@ resource "azurerm_container_group" "main" {
   ]
 
   container {
+    name   = "nginx"
+    image  = "nginx"
+    cpu    = "1.0"
+    memory = "1.5"
+    environment_variables = {
+      TZ = "America/Sao_Paulo"
+    }
+
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
+
+    ports {
+      port = 8080
+      protocol = "TCP"
+    }
+
+    ports {
+      port = 443
+      protocol = "TCP"
+    }
+
+    volume {
+      name                 = "nginx"
+      mount_path           = "/etc/nginx/"
+      share_name           = "nginx"
+      read_only            = false
+      storage_account_name = azurerm_storage_account.main.name
+      storage_account_key  = azurerm_storage_account.main.primary_access_key
+    }
+  }
+
+  container {
+    name   = "nginx-prometheus-exporter"
+    image  = "nginx/nginx-prometheus-exporter"
+    cpu    = "1.0"
+    memory = "1.5"
+    environment_variables = {
+      TZ = "America/Sao_Paulo"
+    }
+
+    commands = [ 
+      "-nginx.scrape-uri=http://localhost:8080/stub_status" 
+    ]
+  }
+
+  container {
+    name   = "busybox"
+    image  = "busybox"
+    cpu    = "1.0"
+    memory = "1.5"
+    environment_variables = {
+      TZ = "America/Sao_Paulo"
+    }
+  }
+
+  container {
     name   = "prometheus"
     image  = "prom/prometheus:latest"
     cpu    = "1.0"

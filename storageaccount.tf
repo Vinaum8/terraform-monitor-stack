@@ -71,3 +71,17 @@ resource "azurerm_storage_share_file" "datasources" {
   source           = "./grafana/provisioning/datasources/datasources.yaml"
   storage_share_id = azurerm_storage_share.stg_files_grafana_datasources.id
 }
+
+
+resource "azurerm_storage_share" "stg_nginx_fileshare" {
+  name                 = "nginx"
+  storage_account_name = azurerm_storage_account.main.name
+  quota                = 10
+  depends_on           = [azurerm_storage_account.main]
+}
+
+resource "azurerm_storage_share_file" "datasources" {
+  name = "nginx.conf"
+  source = "./nginx/nginx.config"
+  storage_share_id = azurerm_storage_share.stg_nginx_fileshare.id
+}
