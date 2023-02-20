@@ -44,14 +44,9 @@ resource "azurerm_container_group" "main" {
       protocol = "TCP"
     }
 
-    ports {
-      port     = 443
-      protocol = "TCP"
-    }
-
     volume {
       name                 = "nginx"
-      mount_path           = "/etc/nginx/"
+      mount_path           = "/etc/nginx"
       share_name           = "nginx"
       read_only            = false
       storage_account_name = azurerm_storage_account.main.name
@@ -59,32 +54,19 @@ resource "azurerm_container_group" "main" {
     }
   }
 
-  container {
-    name   = "nginx-prometheus-exporter"
-    image  = "nginx/nginx-prometheus-exporter"
-    cpu    = "0.1"
-    memory = "0.5"
-    environment_variables = {
-      TZ = "America/Sao_Paulo"
-    }
-
-    commands = [
-      "-nginx.scrape-uri=http://localhost:8080/stub_status"
-    ]
-  }
-  # container {
-  #   name   = "nginx-prometheus-exporter"
-  #   image  = "nginx/nginx-prometheus-exporter"
-  #   cpu    = "1.0"
-  #   memory = "1.5"
-  #   environment_variables = {
-  #     TZ = "America/Sao_Paulo"
-  #   }
-# 
-  #   commands = [ 
-  #     "-nginx.scrape-uri=http://localhost:8080/stub_status" 
-  #   ]
-  # }
+  #container {
+  #  name   = "nginx-prometheus-exporter"
+  #  image  = "nginx/nginx-prometheus-exporter"
+  #  cpu    = "0.1"
+  #  memory = "0.5"
+  #  environment_variables = {
+  #    TZ = "America/Sao_Paulo"
+  #  }
+#
+  #  commands = [
+  #    "-nginx.scrape-uri=http://localhost:8080/stub_status"
+  #  ]
+  #}
 
   container {
     name   = "busybox"
@@ -117,7 +99,7 @@ resource "azurerm_container_group" "main" {
 
     volume {
       name                 = "prometheus"
-      mount_path           = "/etc/prometheus/"
+      mount_path           = "/etc/prometheus"
       share_name           = "prometheus"
       storage_account_name = azurerm_storage_account.main.name
       storage_account_key  = azurerm_storage_account.main.primary_access_key
@@ -174,6 +156,7 @@ resource "azurerm_container_group" "main" {
 
   depends_on = [
     azurerm_resource_group.main,
-    azurerm_storage_account.main
+    azurerm_storage_account.main,
+    azurerm_storage_share.stg_nginx_fileshare
   ]
 }
